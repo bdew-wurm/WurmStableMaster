@@ -245,10 +245,15 @@ public class StableMasterMod implements WurmServerMod, Configurable, Initable, P
 		                                	// and if true add all the associated animal data.
 		                                	if (toSend.getTemplateId() == animalTokenId)
 		                                	{
-		                                		outputStream.writeBoolean(true);
-		                                		long animalId = toSend.getData();
-		                                		Creature animal = Creatures.getInstance().getCreature(animalId);
-		                                		CreatureHelper.toStream(animal, outputStream, enableServerTransferLogging);
+												long animalId = toSend.getData();
+												try {
+													Creature animal = Creatures.getInstance().getCreature(animalId);
+													outputStream.writeBoolean(true);
+													CreatureHelper.toStream(animal, outputStream, enableServerTransferLogging);
+												} catch (Exception e) {
+													logException(String.format("Error getting creature %d to send with token", animalId), e);
+													outputStream.writeBoolean(false);
+												}
 		                                	}
 		                                	else
 		                                	{
@@ -440,17 +445,17 @@ public class StableMasterMod implements WurmServerMod, Configurable, Initable, P
 	           	                                	{
 	           	                                		// Get animal associated with this token.
 	                                        			animal = allCreatures.getCreature(curItem.getData());
-	           	                                	} catch (NoSuchCreatureException e)
+														if (enableServerTransferLogging)
+														{
+															logger.log(Level.INFO, "Found an animal token(" + curItem.getName() +
+																	") referring to an animal(" + animal.getName() +
+																	") in a player's inventory being transferred to another server of the same type. Animal is being deleted.");
+														}
+														MethodsCreatures.destroyCreature(animal);
+													} catch (NoSuchCreatureException e)
 	           	                                	{
 	           	                                		logger.log(Level.WARNING, "Failed to get animal associated with animal token. " + e.getMessage(), e);
 	           	                                	}
-		                                			if (enableServerTransferLogging)
-		                                			{
-		                                				logger.log(Level.INFO, "Found an animal token(" + curItem.getName() + 
-		                                						") referring to an animal(" + animal.getName() + 
-		                                						") in a player's inventory being transferred to another server of the same type. Animal is being deleted.");
-		                                			}
-	                                    			MethodsCreatures.destroyCreature(animal);
 	                                    		}
 	                                    	}
 	                                	}
@@ -552,8 +557,8 @@ public class StableMasterMod implements WurmServerMod, Configurable, Initable, P
 			if (this.enableServerTransfer)
 			{
 				animalTokenItemTypes = new short[] 
-					{ ITEM_TYPE_LEATHER, ITEM_TYPE_MEAT, ITEM_TYPE_NOTAKE, ITEM_TYPE_INDESTRUCTIBLE,
-						ITEM_TYPE_NODROP, ITEM_TYPE_FULLPRICE, ITEM_TYPE_HASDATA, ITEM_TYPE_NORENAME,
+					{ ITEM_TYPE_LEATHER, ITEM_TYPE_MEAT, ITEM_TYPE_INDESTRUCTIBLE,
+						ITEM_TYPE_NODROP, ITEM_TYPE_HASDATA, ITEM_TYPE_NORENAME,
 						ITEM_TYPE_FLOATING, ITEM_TYPE_NAMED,
 						ITEM_TYPE_NOBANK, ITEM_TYPE_MISSION, ITEM_TYPE_NODISCARD, 
 						ITEM_TYPE_NEVER_SHOW_CREATION_WINDOW_OPTION, ITEM_TYPE_NO_IMPROVE
@@ -562,8 +567,8 @@ public class StableMasterMod implements WurmServerMod, Configurable, Initable, P
 			else
 			{
 				animalTokenItemTypes = new short[] 
-						{ ITEM_TYPE_LEATHER, ITEM_TYPE_MEAT, ITEM_TYPE_NOTAKE, ITEM_TYPE_INDESTRUCTIBLE,
-							ITEM_TYPE_NODROP, ITEM_TYPE_FULLPRICE, ITEM_TYPE_HASDATA, ITEM_TYPE_NORENAME,
+						{ ITEM_TYPE_LEATHER, ITEM_TYPE_MEAT, ITEM_TYPE_INDESTRUCTIBLE,
+							ITEM_TYPE_NODROP, ITEM_TYPE_HASDATA, ITEM_TYPE_NORENAME,
 							ITEM_TYPE_FLOATING, ITEM_TYPE_NAMED, ITEM_TYPE_SERVERBOUND,
 							ITEM_TYPE_NOBANK, ITEM_TYPE_MISSION, ITEM_TYPE_NODISCARD, 
 							ITEM_TYPE_NEVER_SHOW_CREATION_WINDOW_OPTION, ITEM_TYPE_NO_IMPROVE

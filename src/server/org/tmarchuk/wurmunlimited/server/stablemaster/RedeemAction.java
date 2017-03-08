@@ -7,11 +7,7 @@ package org.tmarchuk.wurmunlimited.server.stablemaster;
 // From Wurm Unlimited Server
 import com.wurmonline.server.behaviours.Action;
 import com.wurmonline.server.behaviours.ActionEntry;
-import com.wurmonline.server.creatures.Creature;
-import com.wurmonline.server.creatures.CreatureHelper;
-import com.wurmonline.server.creatures.CreaturePos;
-import com.wurmonline.server.creatures.CreatureStatus;
-import com.wurmonline.server.creatures.Creatures;
+import com.wurmonline.server.creatures.*;
 import com.wurmonline.server.items.Item;
 import com.wurmonline.server.players.Player;
 import com.wurmonline.server.Items;
@@ -103,10 +99,8 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 	@Override
 	public boolean action(Action action, Creature performer, Item target, short num, float counter) 
 	{
-		try 
-		{
-			if (target.isTraded())
-			{
+		try {
+			if (target.isTraded()) {
 				performer.getCommunicator().sendNormalServerMessage("You cannot redeem an animal token while it is part of a trade.");
 				return true;
 			}
@@ -116,13 +110,13 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 			// Set the location to the current player location.
 			CreaturePos performerPos = performer.getStatus().getPosition();
 			CreatureStatus animalStatus = theAnimal.getStatus();
-			animalStatus.setPositionXYZ(performerPos.getPosX(), performerPos.getPosY(), 
+			animalStatus.setPositionXYZ(performerPos.getPosX(), performerPos.getPosY(),
 					performerPos.getPosZ());
 			animalStatus.getPosition().setZoneId(performerPos.getZoneId());
-			
+
 			// Set the kingdom of the animal to the player's kingdom.
 			theAnimal.setKingdomId(performer.getKingdomId());
-			
+
 			// Restore animal to world.
 			CreatureHelper.showCreature(theAnimal);
 
@@ -130,7 +124,12 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 			Items.destroyItem(target.getWurmId());
 
 			// Inform the player.
-			performer.getCommunicator().sendNormalServerMessage("You redeem your animal token for an animal!" );
+			performer.getCommunicator().sendNormalServerMessage("You redeem your animal token for an animal!");
+			return true;
+		} catch (NoSuchCreatureException e) {
+			logger.log(Level.WARNING, String.format("Creature ID=%d is gone, destroying token (%d) and notifying player (%s)", target.getData(), target.getWurmId(), performer.getName()));
+			performer.getCommunicator().sendAlertServerMessage("The animal associated with this token is either dead or missing and can't be restored.");
+			Items.destroyItem(target.getWurmId());
 			return true;
 		} catch (Exception e) {
 			logger.log(Level.WARNING, e.getMessage(), e);
