@@ -21,6 +21,7 @@ import org.gotti.wurmunlimited.modsupport.actions.ModActions;
 
 // Base Java
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,25 +57,26 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 		return this;
 	}
 
+	private boolean canRedeem(Creature performer, Item target) {
+		try {
+			if (!performer.isPlayer() || target.getTemplateId() == animalTokenId || target.isTraded()) return false;
+			Item topParent = target.getTopParentOrNull();
+			return performer.getInventory() == topParent;
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Error in redeem check", e);
+			return false;
+		}
+	}
+
 	@Override
 	public List<ActionEntry> getBehavioursFor(Creature performer, Item target) 
 	{
-		// TODO: Probably need a bunch more checks to make sure it's not redeemed while in a boat or swimming or something for example.
-		try
+		if (canRedeem(performer, target))
 		{
-			if ((performer instanceof Player) && 
-					((target.getTemplateId() == animalTokenId)) && (target.getParent().isInventory())
-					&& !target.isTraded()) 
-			{
-				return Arrays.asList(actionEntry);
-			} 
-			else 
-			{
-				return null;
-			}
-		} catch (NoSuchItemException e)
+			return Collections.singletonList(actionEntry);
+		}
+		else
 		{
-			logger.log(Level.WARNING, e.getMessage(), e);
 			return null;
 		}
 	}
