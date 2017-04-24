@@ -59,7 +59,7 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 
 	private boolean canRedeem(Creature performer, Item target) {
 		try {
-			if (!performer.isPlayer() || target.getTemplateId() == animalTokenId || target.isTraded()) return false;
+			if (!performer.isPlayer() || target.getTemplateId() != animalTokenId || target.isTraded()) return false;
 			Item topParent = target.getTopParentOrNull();
 			return performer.getInventory() == topParent;
 		} catch (Exception e) {
