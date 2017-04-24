@@ -587,7 +587,7 @@ public class StableMasterMod implements WurmServerMod, Configurable, Initable, P
 					"model.writ.", ANIMAL_TOKEN_DIFFICULTY, 
 					animalTokenMinimumWeightGrams, ItemMaterials.MATERIAL_PAPER, 
 					ANIMAL_TOKEN_VALUE, ANIMAL_TOKEN_IS_PURCHASED,
-					ANIMAL_TOKEN_ARMOR_TYPE);
+					ANIMAL_TOKEN_ARMOR_TYPE, 0);
        
 		} catch (IOException ioEx)
 		{
