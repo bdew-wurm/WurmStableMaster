@@ -115,6 +115,7 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 			animalStatus.setPositionXYZ(performerPos.getPosX(), performerPos.getPosY(),
 					performerPos.getPosZ());
 			animalStatus.getPosition().setZoneId(performerPos.getZoneId());
+			theAnimal.setBridgeId(performer.getBridgeId());
 
 			// Set the kingdom of the animal to the player's kingdom.
 			theAnimal.setKingdomId(performer.getKingdomId());
