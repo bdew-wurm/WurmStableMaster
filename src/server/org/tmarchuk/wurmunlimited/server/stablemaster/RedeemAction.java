@@ -112,9 +112,10 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 			// Set the location to the current player location.
 			CreaturePos performerPos = performer.getStatus().getPosition();
 			CreatureStatus animalStatus = theAnimal.getStatus();
-			animalStatus.setPositionXYZ(performerPos.getPosX(), performerPos.getPosY(),
-					performerPos.getPosZ());
+			animalStatus.setPositionXYZ(performerPos.getPosX(), performerPos.getPosY(), performerPos.getPosZ());
+			animalStatus.setLayer(performer.getLayer());
 			animalStatus.getPosition().setZoneId(performerPos.getZoneId());
+			Creatures.getInstance().setLastLed(theAnimal.getWurmId(), performer.getWurmId());
 			theAnimal.setBridgeId(performer.getBridgeId());
 
 			// Set the kingdom of the animal to the player's kingdom.
