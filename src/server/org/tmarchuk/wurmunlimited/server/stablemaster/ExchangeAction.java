@@ -210,34 +210,39 @@ public class ExchangeAction implements ModAction, BehaviourProvider, ActionPerfo
 	
 	private static String getAnimalDescription(Creature target)
 	{
-		String toReturn = target.getStatus().getAgeString().toLowerCase() + " ";
-        if(target.getTemplate().getTemplateId() == HORSE_TEMPLATE_ID) 
+		String toReturn = target.getName();
+		String typeName = target.getTypeName().toLowerCase();
+        if(target.isHorse())
         {
-            toReturn += "grey";
-            if(target.hasTrait(15)) 
+            if(target.hasTrait(15))
             {
-            	toReturn += "brown";
+            	toReturn += " - brown";
             } else if(target.hasTrait(16)) 
             {
-            	toReturn += "gold";
+            	toReturn += " - gold";
             } else if(target.hasTrait(17)) 
             {
-            	toReturn += "black";
+            	toReturn += " - black";
             } else if(target.hasTrait(18)) 
             {
-            	toReturn += "white";
+            	toReturn += " - white";
             } else if(target.hasTrait(24)) 
             {
-            	toReturn += "piebaldPinto";
+            	toReturn += " - piebald pinto";
             } else if(target.hasTrait(25)) 
             {
-            	toReturn += "bloodBay";
+            	toReturn += " - blood bay";
             } else if(target.hasTrait(23)) 
             {
-            	toReturn += "ebonyBlack";
-            }
-        }
-        toReturn += " " + target.getNameWithoutPrefixes().toLowerCase();
+            	toReturn += " - ebony black";
+            } else {
+				toReturn += " - grey";
+			}
+			if (!toReturn.contains(typeName))
+				toReturn += " " + typeName;
+        } else if (!toReturn.contains(typeName)) {
+        	toReturn += " - " + typeName;
+		}
         return toReturn;
 	}
 
