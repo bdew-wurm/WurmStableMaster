@@ -1,10 +1,9 @@
-bin.ant.server
-bin.ant.client
-bin
-dist
-build.properties
 .classpath
 .project
 .settings
+.idea
+.gradle
+build
+*.iml
 *~
 mods/*/*.jar
