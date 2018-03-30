@@ -212,32 +212,9 @@ public class ExchangeAction implements ModAction, BehaviourProvider, ActionPerfo
 	{
 		String toReturn = target.getName();
 		String typeName = target.getTypeName().toLowerCase();
-        if(target.isHorse())
+        if(target.isHorse() || (target.getTemplate().isBlackOrWhite && target.hasTrait(17)))
         {
-            if(target.hasTrait(15))
-            {
-            	toReturn += " - brown";
-            } else if(target.hasTrait(16)) 
-            {
-            	toReturn += " - gold";
-            } else if(target.hasTrait(17)) 
-            {
-            	toReturn += " - black";
-            } else if(target.hasTrait(18)) 
-            {
-            	toReturn += " - white";
-            } else if(target.hasTrait(24)) 
-            {
-            	toReturn += " - piebald pinto";
-            } else if(target.hasTrait(25)) 
-            {
-            	toReturn += " - blood bay";
-            } else if(target.hasTrait(23)) 
-            {
-            	toReturn += " - ebony black";
-            } else {
-				toReturn += " - grey";
-			}
+        	toReturn += " - " + target.getTemplate().getColourName(target.getStatus());
 			if (!toReturn.contains(typeName))
 				toReturn += " " + typeName;
         } else if (!toReturn.contains(typeName)) {
