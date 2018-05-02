@@ -382,6 +382,7 @@ public class StableMasterMod implements WurmServerMod, Configurable, Initable, P
 		                                				logger.log(Level.INFO, "Deleting animal(" + curAnimal.getName() + 
 		                                						") associated with animal token that transferred on a vehicle.");
 		                                			}
+		                                			CreatureHelper.cleanCreatureItemsSafe(curAnimal);
 		                                			MethodsCreatures.destroyCreature(curAnimal);
 		                                		}
 		                                	}
@@ -451,6 +452,7 @@ public class StableMasterMod implements WurmServerMod, Configurable, Initable, P
 																	") referring to an animal(" + animal.getName() +
 																	") in a player's inventory being transferred to another server of the same type. Animal is being deleted.");
 														}
+														CreatureHelper.cleanCreatureItemsSafe(animal);
 														MethodsCreatures.destroyCreature(animal);
 													} catch (NoSuchCreatureException e)
 	           	                                	{

@@ -655,4 +655,25 @@ public class CreatureHelper
 			logger.log(Level.WARNING, ((Creature) obj).getName() + ":" + e.getMessage(), e);
 		}
 	}
+
+	public static void cleanCreatureItemsSafe(Creature creature) {
+		Item[] items;
+		try {
+			items = creature.possessions.getInventory().getAllItems(true);
+
+			for (Item item: items) {
+				Items.destroyItem(item.getWurmId(), true, true);
+			}
+
+			items = creature.getBody().getBodyItem().getAllItems(true);
+
+
+			for (Item item: items) {
+				Items.destroyItem(item.getWurmId(), true, true);
+			}
+
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Error when decaying items: " + e.getMessage(), e);
+		}
+	}
 }
