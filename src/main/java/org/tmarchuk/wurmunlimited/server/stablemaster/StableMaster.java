@@ -9,7 +9,7 @@ import com.wurmonline.shared.constants.SoundNames;
 
 //From Wurm Unlimited Server
 import com.wurmonline.server.bodys.BodyTemplate;
-import static com.wurmonline.server.creatures.CreatureTypes.*;
+import static com.wurmonline.shared.constants.CreatureTypes.*;
 import com.wurmonline.server.skills.SkillList;
 
 //From Ago's modloader
@@ -17,6 +17,7 @@ import org.gotti.wurmunlimited.modsupport.CreatureTemplateBuilder;
 import org.gotti.wurmunlimited.modsupport.IdFactory;
 import org.gotti.wurmunlimited.modsupport.IdType;
 import org.gotti.wurmunlimited.modsupport.creatures.ModCreature;
+
 
 
 public class StableMaster implements ModCreature

@@ -70,8 +70,7 @@ public class StableMasterMod implements WurmServerMod, Configurable, Initable, P
 	private static final float ANIMAL_TOKEN_DIFFICULTY = 1.0f;
 	private static final int ANIMAL_TOKEN_VALUE = 0;
 	private static final boolean ANIMAL_TOKEN_IS_PURCHASED = false;
-	private static final int ANIMAL_TOKEN_ARMOR_TYPE = -1;
-	
+
 	// Configuration value string constants
 	private static final String CONFIG_SPECIFY_STABLE_MASTER_ID = "specifyStableMasterId";
 	private static final String CONFIG_STABLE_MASTER_ID = "stableMasterId";
@@ -588,8 +587,7 @@ public class StableMasterMod implements WurmServerMod, Configurable, Initable, P
 					MiscConstants.EMPTY_BYTE_PRIMITIVE_ARRAY, 
 					"model.writ.", ANIMAL_TOKEN_DIFFICULTY, 
 					animalTokenMinimumWeightGrams, ItemMaterials.MATERIAL_PAPER, 
-					ANIMAL_TOKEN_VALUE, ANIMAL_TOKEN_IS_PURCHASED,
-					ANIMAL_TOKEN_ARMOR_TYPE, 0);
+					ANIMAL_TOKEN_VALUE, ANIMAL_TOKEN_IS_PURCHASED, 0);
        
 		} catch (IOException ioEx)
 		{
