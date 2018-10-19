@@ -14,6 +14,7 @@ import com.wurmonline.server.Items;
 import com.wurmonline.server.NoSuchItemException;
 
 // From Ago's modloader
+import com.wurmonline.server.villages.Village;
 import org.gotti.wurmunlimited.modsupport.actions.ActionPerformer;
 import org.gotti.wurmunlimited.modsupport.actions.BehaviourProvider;
 import org.gotti.wurmunlimited.modsupport.actions.ModAction;
@@ -31,15 +32,15 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 	private static Logger logger = Logger.getLogger(RedeemAction.class.getName());
 
 	// Constants
-	
+
 	// Configuration
 	private final int animalTokenId;
-	
+
 	// Action data
 	private final short actionId;
 	private final ActionEntry actionEntry;
-	
-	public RedeemAction(int animalTokenId) 
+
+	public RedeemAction(int animalTokenId)
 	{
 		this.animalTokenId = animalTokenId;
 		actionId = (short) ModActions.getNextActionId();
@@ -69,7 +70,7 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 	}
 
 	@Override
-	public List<ActionEntry> getBehavioursFor(Creature performer, Item target) 
+	public List<ActionEntry> getBehavioursFor(Creature performer, Item target)
 	{
 		if (canRedeem(performer, target))
 		{
@@ -82,7 +83,7 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 	}
 
 	@Override
-	public List<ActionEntry> getBehavioursFor(Creature performer, Item subject, Item target) 
+	public List<ActionEntry> getBehavioursFor(Creature performer, Item subject, Item target)
 	{
 		return getBehavioursFor(performer, target);
 	}
@@ -93,13 +94,13 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 	}
 
 	@Override
-	public boolean action(Action action, Creature performer, Item source, Item target, short num, float counter) 
+	public boolean action(Action action, Creature performer, Item source, Item target, short num, float counter)
 	{
 		return action(action, performer, target, num, counter);
 	}
 
 	@Override
-	public boolean action(Action action, Creature performer, Item target, short num, float counter) 
+	public boolean action(Action action, Creature performer, Item target, short num, float counter)
 	{
 		try {
 			if (target.isTraded()) {
@@ -121,7 +122,13 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 			// Set the kingdom of the animal to the player's kingdom.
 			theAnimal.setKingdomId(performer.getKingdomId());
 
-			// Restore animal to world.
+            Brand brand = Creatures.getInstance().getBrand(theAnimal.getWurmId());
+            if (brand != null && brand.getBrandId() != performer.getCitizenVillage().getId()) {
+                logger.log(Level.INFO, String.format("Removing brand on %s (%d) as it was redeemed by (%s) who's in a different village", theAnimal.getName(), theAnimal.getWurmId(), performer.getName()));
+                brand.deleteBrand();
+            }
+
+            // Restore animal to world.
 			CreatureHelper.showCreature(theAnimal);
 
 			// Delete redemption token from player's inventory.
@@ -129,6 +136,7 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 
 			// Inform the player.
 			performer.getCommunicator().sendNormalServerMessage("You redeem your animal token for an animal!");
+
 			return true;
 		} catch (NoSuchCreatureException e) {
 			logger.log(Level.WARNING, String.format("Creature ID=%d is gone, destroying token (%d) and notifying player (%s)", target.getData(), target.getWurmId(), performer.getName()));
