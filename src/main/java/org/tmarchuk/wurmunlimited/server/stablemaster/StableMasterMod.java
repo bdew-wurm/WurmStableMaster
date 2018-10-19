@@ -610,6 +610,7 @@ public class StableMasterMod implements WurmServerMod, Configurable, Initable, P
 		ModActions.registerAction(new RedeemAction(animalTokenId));
 		ModActions.registerAction(new LoadTokenAction(animalTokenId, enableSmallBoatsLoad));
 		ModActions.registerAction(new UnloadTokenAction(animalTokenId));
+		ModActions.registerActionPerformer(new ExamineTokenPerformer(animalTokenId));
 	}
 
 }
