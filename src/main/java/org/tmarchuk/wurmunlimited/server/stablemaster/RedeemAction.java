@@ -123,8 +123,8 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 			theAnimal.setKingdomId(performer.getKingdomId());
 
             Brand brand = Creatures.getInstance().getBrand(theAnimal.getWurmId());
-            if (brand != null && brand.getBrandId() != performer.getCitizenVillage().getId()) {
-                logger.log(Level.INFO, String.format("Removing brand on %s (%d) as it was redeemed by (%s) who's in a different village", theAnimal.getName(), theAnimal.getWurmId(), performer.getName()));
+            if (brand != null && (performer.getCitizenVillage() == null || brand.getBrandId() != performer.getCitizenVillage().getId())) {
+                logger.log(Level.INFO, String.format("Removing brand on %s (%d) as it was redeemed by %s who's in a different village", theAnimal.getName(), theAnimal.getWurmId(), performer.getName()));
                 brand.deleteBrand();
             }
 
