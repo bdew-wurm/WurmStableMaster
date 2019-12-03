@@ -102,12 +102,9 @@ public class RedeemAction implements ModAction, BehaviourProvider, ActionPerform
 	@Override
 	public boolean action(Action action, Creature performer, Item target, short num, float counter)
 	{
-		try {
-			if (target.isTraded()) {
-				performer.getCommunicator().sendNormalServerMessage("You cannot redeem an animal token while it is part of a trade.");
-				return true;
-			}
+		if (!canRedeem(performer, target)) return true;
 
+		try {
 			Creature theAnimal = Creatures.getInstance().getCreature(target.getData());
 
 			// Set the location to the current player location.

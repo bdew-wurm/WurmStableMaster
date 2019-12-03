@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group "net.bdew.wurm"
-version "bdew-7"
+version "bdew-8"
 
 repositories {
     mavenCentral()
